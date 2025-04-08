@@ -1,0 +1,11 @@
+FROM public.ecr.aws/lambda/nodejs:20
+
+ARG PNPM_VERSION
+ENV PNPM_VERSION=$PNPM_VERSION
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+
+RUN curl -fsSL https://get.pnpm.io/install.sh | env PNPM_VERSION=${PNPM_VERSION} sh -
+
+# ENV PNPM_HOME="/root/.local/share/pnpm"
+# ENV PATH="$PNPM_HOME:$PATH"
