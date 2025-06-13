@@ -1,0 +1,15 @@
+FROM node:lts-alpine
+
+ARG PNPM_VERSION
+ENV PNPM_VERSION=$PNPM_VERSION
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+
+RUN apk add --no-cache curl && apk cache clean
+RUN [ ! -e /lib/libssl.so.3 ] && ln -s /usr/lib/libssl.so.3 /lib/libssl.so.3 || echo "Link already exists"
+RUN curl -fsSL https://get.pnpm.io/install.sh | ENV="$HOME/.shrc" SHELL="$(which sh)" PNPM_VERSION=${PNPM_VERSION} sh -
+
+COPY docker-entrypoint.sh /usr/local/bin/
+ENTRYPOINT ["docker-entrypoint.sh"]
+
+CMD [ "pnpm" ]
